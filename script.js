@@ -39,39 +39,81 @@ class Empresa extends Cliente{
 }
 
 class Transacao{
-    transfernecia(contaOrigem, contaDestino, idTransacao, dataDeTransacao, valorDaTransferencia){
-/////////////////////////////////////////////////////////////////////// SUSPEITO DE ERRO
-    //     this.contaOrigem    = contaOrigem;
-    //     this.contaDestino   = contaDestino;
+    static transfernecia(contaOrigem, contaDestino, idTransacao, dataDeTransacao, valorDaTransferencia){
 
-    //     if(this.contaOrigem.saldo >= valorDaTransferencia){
-    //         this.contaOrigem.historico.push(
-    //             {
-    //                 idTransacao: idTransacao,
-    //                 dataDeTransacao: dataDeTransacao,
-    //                 valorDaTransferencia: valorDaTransferencia,
-    //                 tipo: "pagamento",
-    //             }
-    //         )
-    //         this.contaDestino.historico.push(
-    //             {
-    //                 idTransacao: idTransacao,
-    //                 dataDeTransacao: dataDeTransacao,
-    //                 valorDaTransferencia: valorDaTransferencia,
-    //                 tipo: "recebimento",
-    //             }
-    //         )
+        if(contaOrigem.saldo >= valorDaTransferencia){
+            contaOrigem.historico.push(
+                {
+                    idTransacao: idTransacao,
+                    dataDeTransacao: dataDeTransacao,
+                    valorDaTransferencia: valorDaTransferencia,
+                    tipo: "pagamento",
+                }
+            )
+            contaDestino.historico.push(
+                {
+                    idTransacao: idTransacao,
+                    dataDeTransacao: dataDeTransacao,
+                    valorDaTransferencia: valorDaTransferencia,
+                    tipo: "recebimento",
+                }
+            )
     
-    //     return {mensagem: "Transferência realizada com sucesso!"}
-    //     }
+        return {mensagem: "Transferência realizada com sucesso!"}
+        }
 
-    //     if(this.contaOrigem.saldo < valorDaTransferencia){
-    //         return {mensagem: "Saldo insuficiente para transferência!"}
-    //     }
-    // }
-///////////////////////////////////////////////////////////////////// SUSPEITO DE ERRO
-}
-    deposito(contaDestino, idDeposito, dataDoDeposito, valorDoDeposito){}
-    pagamentoSalario(contaOrigem, contaDestino, idPagamento, dataDoPagamento, valorDoSalario){}
+        if(contaOrigem.saldo < valorDaTransferencia){
+            return {mensagem: "Saldo insuficiente para transferência!"}
+        }
+    }
 
+    static deposito(contaDestino, idDeposito, dataDoDeposito, valorDoDeposito){
+        this.idDeposito         = idDeposito;
+        this.dataDoDeposito     = dataDoDeposito;
+        this.valorDoDeposito    = valorDoDeposito;
+        
+        contaDestino.historico.push(
+            {
+                idDeposito: idDeposito,
+                dataDoDeposito: dataDoDeposito,
+                valorDoDeposito: valorDoDeposito,
+                tipo: "recebimento",
+              }
+        );
+        return {mensagem: "Depósito realizado com sucesso!"}
+    }
+
+    static pagamentoSalario(contaOrigem, contaDestino, idPagamento, dataDoPagamento, valorDoSalario){
+        this.contaOrigem        = contaOrigem;
+        this.contaDestino       = contaDestino;
+        this.idPagamento        = idPagamento;
+        this.dataDoPagamento    = dataDoPagamento;
+        this.valorDoSalario     = valorDoSalario;
+
+        if(Empresa.includes(contaOrigem) && Pessoa.valorDoSalario>=1000){
+            return {mensagem: "Seu limite máximo para este tipo de operação é de 1000, entre em contato com o banco!"} 
+        }
+
+        if(Empresa.contaOrigem >= Pessoa.valoDoSalario){
+            Pessoa.contaDestino.saldo += Pessoa.valoDoSalario;
+            Empresa.contaOrigem.saldo -= Pessoa.valoDoSalario;
+            Pessoa.contaDestino.historico.push(
+                {
+                    idPagamento: idPagamento,
+                    dataDoPagamento: dataDoPagamento,
+                    valorDoSalario: valorDoSalario,
+                    tipo: "recebimento",
+                }
+            )
+            Empresa.contaOrigem.historico.push(
+                {
+                    idPagamento: idPagamento,
+                    dataDoPagamento: dataDoPagamento,
+                    valorDoSalario: valorDoSalario,
+                    tipo: "recebimento",
+                }
+            )
+            return {mensagem: "Pagamento realizado com sucesso!"}
+        }else return {mensagem: "Saldo insuficiente para realizar o pagamento!"}
+    }
 }
