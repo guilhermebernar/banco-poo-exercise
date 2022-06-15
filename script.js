@@ -39,7 +39,7 @@ class Empresa extends Cliente{
 }
 
 class Transacao{
-    static transfernecia(contaOrigem, contaDestino, idTransacao, dataDeTransacao, valorDaTransferencia){
+    static transferencia(contaOrigem, contaDestino, idTransacao, dataDeTransacao, valorDaTransferencia){
 
         if(contaOrigem.saldo >= valorDaTransferencia){
             contaOrigem.historico.push(
@@ -84,20 +84,18 @@ class Transacao{
     }
 
     static pagamentoSalario(contaOrigem, contaDestino, idPagamento, dataDoPagamento, valorDoSalario){
-        this.contaOrigem        = contaOrigem;
-        this.contaDestino       = contaDestino;
-        this.idPagamento        = idPagamento;
-        this.dataDoPagamento    = dataDoPagamento;
-        this.valorDoSalario     = valorDoSalario;
-
-        if(Empresa.includes(contaOrigem) && Pessoa.valorDoSalario>=1000){
+        this.contaOrigem = contaOrigem;
+        this.contaDestino = contaDestino;
+        
+        if(contaOrigem.constructor.name === "Pessoa" && contaOrigem.valorDoSalario<=1000){
             return {mensagem: "Seu limite máximo para este tipo de operação é de 1000, entre em contato com o banco!"} 
         }
 
-        if(Empresa.contaOrigem >= Pessoa.valoDoSalario){
-            Pessoa.contaDestino.saldo += Pessoa.valoDoSalario;
-            Empresa.contaOrigem.saldo -= Pessoa.valoDoSalario;
-            Pessoa.contaDestino.historico.push(
+        if(contaOrigem.constructor.saldo >= contaDestino.constructor.valoDoSalario){
+            contaDestino.constructor.saldo += contaDestino.constructor.valoDoSalario;
+            contaOrigem.constructor.saldo -= contaDestino.constructor.valoDoSalario;
+            
+            contaDestino.constructor.historico.push(
                 {
                     idPagamento: idPagamento,
                     dataDoPagamento: dataDoPagamento,
@@ -105,7 +103,8 @@ class Transacao{
                     tipo: "recebimento",
                 }
             )
-            Empresa.contaOrigem.historico.push(
+            
+            contaOrigem.constructor.historico.push(
                 {
                     idPagamento: idPagamento,
                     dataDoPagamento: dataDoPagamento,
